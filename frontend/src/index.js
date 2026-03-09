@@ -4,8 +4,9 @@ import App from './App';
 import './index.css';
 import axios from 'axios';
 
-// Instantly force Axios to hit the backend without restarting the React server
-axios.defaults.baseURL = 'http://localhost:5000';
+// Use an environment variable for the backend API URL when deployed on Vercel,
+// or use fallback to localhost during local development.
+axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

@@ -3,7 +3,10 @@ const cors = require('cors');
 const { admin, db } = require('./firebaseAdmin');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  credentials: true
+}));
 app.use(express.json());
 
 // Middleware to verify Firebase ID token

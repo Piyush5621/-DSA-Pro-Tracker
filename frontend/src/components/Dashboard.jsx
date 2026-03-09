@@ -1,9 +1,6 @@
 import { useProgress } from '../context/ProgressContext';
 import { motion } from 'framer-motion';
-import {
-    CheckCircle2, Clock, AlertTriangle, TrendingUp,
-    Target, Flame
-} from 'lucide-react';
+import { CheckCircle2, Clock, AlertTriangle, TrendingUp } from 'lucide-react';
 
 const cardVariants = {
     hidden: { opacity: 0, y: 24, scale: 0.96 },

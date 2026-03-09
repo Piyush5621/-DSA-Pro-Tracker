@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Target, ChevronRight, Zap, BarChart2, BookOpen, CheckCircle2,
-  Clock, AlertTriangle, Shield
+  Shield
 } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
 import { SiLeetcode, SiGeeksforgeeks } from 'react-icons/si';

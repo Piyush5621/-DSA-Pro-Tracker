@@ -2,7 +2,7 @@ import { useProgress } from '../context/ProgressContext';
 import { motion } from 'framer-motion';
 import {
     CheckCircle2, Clock, AlertTriangle, TrendingUp,
-    Target, Flame, Award
+    Target, Flame
 } from 'lucide-react';
 
 const cardVariants = {

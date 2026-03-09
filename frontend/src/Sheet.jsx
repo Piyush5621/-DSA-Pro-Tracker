@@ -107,7 +107,7 @@ const Sheet = () => {
   }
 
   // Loading state
-  if (loading || sheetData.length === 0) {
+  if (sheetData.length === 0) {
     return (
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center gap-4">
         <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-2xl shadow-blue-500/30 animate-pulse">

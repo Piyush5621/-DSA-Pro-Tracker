@@ -1,5 +1,11 @@
 {
-  "routes": [
-    { "src": "/(.*)", "dest": "/index.html" }
-  ]
+    "env": {
+        "CI": "false"
+    },
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/index.html"
+        }
+    ]
 }

@@ -3,7 +3,7 @@ import { useProgress } from '../context/ProgressContext';
 import { useTheme } from '../context/ThemeContext';
 import { LogOut, Sun, Moon, Target, BarChart2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FcGoogle } from 'react-icons/fc';
+
 
 const Navbar = ({ totalQuestions }) => {
     const { user, logout } = useAuth();

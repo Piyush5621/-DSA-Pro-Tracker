@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useProgress } from '../../context/ProgressContext';
-import { ExternalLink, PenSquare, CheckCircle2, Clock, AlertTriangle, X } from 'lucide-react';
+import { ExternalLink, PenSquare, CheckCircle2, Clock, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SiLeetcode, SiGeeksforgeeks, SiHackerrank, SiCodechef, SiCodingninjas, SiYoutube } from 'react-icons/si';
 import { FaExternalLinkAlt } from 'react-icons/fa';
@@ -34,7 +34,6 @@ const QuestionLink = ({ name, url, path }) => {
   const qData = userProgress[url] || {};
   const currentStatus = isSolved ? 'Completed' : (qData.status || null);
   const currentNotes = qData.notes || '';
-  const statusConfig = STATUS_OPTIONS.find(s => s.value === currentStatus);
   const platform = getPlatform(url);
   const PlatformIcon = platform?.icon || FaExternalLinkAlt;
 

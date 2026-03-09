@@ -9,6 +9,8 @@ import axios from 'axios';
 import { Search, BookOpen, X, Loader2, ListFilter } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+import dsaDataLocal from './data/dsaData.json';
+
 const FILTERS = [
   { id: 'All', label: 'All Topics' },
   { id: 'Unsolved', label: 'Unsolved' },
@@ -26,21 +28,23 @@ const Sheet = () => {
   const [filterType, setFilterType] = useState('All');
 
   useEffect(() => {
-    axios.get('/api/sheet').then(({ data }) => {
-      setSheetData(data);
-      const countLinks = (nodes) => {
-        let count = 0;
-        nodes.forEach(node => {
-          if (node.type === 'link') count++;
-          else {
-            count += node.links?.length || 0;
-            count += countLinks(node.children || []);
-          }
-        });
-        return count;
-      };
-      setTotalQuestions(countLinks(data));
-    });
+    // Load local static data instantly without waiting for backend
+    setSheetData(dsaDataLocal);
+
+    // Calculate total questions
+    const countLinks = (nodes) => {
+      let count = 0;
+      nodes.forEach(node => {
+        if (node.type === 'link') count++;
+        else {
+          count += node.links?.length || 0;
+          count += countLinks(node.children || []);
+        }
+      });
+      return count;
+    };
+
+    setTotalQuestions(countLinks(dsaDataLocal));
   }, []);
 
   // Flatten the tree for advanced filtering

@@ -1,0 +1,106 @@
+[POST] REQ.BODY: {"solved":["https://practice.geeksforgeeks.org/problems/reverse-an-array/0"],"userProgress":{"https://practice.geeksforgeeks.org/problems/reverse-an-array/0":{"status":"Completed"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"T"}}}
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"Th"}}}
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"Thi"}}}
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This"}}}
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This "}}}
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This i"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is "}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a "}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a t"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a te"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a tes"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test "}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test n"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test no"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test not"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."}}}
+[POST] SUCCESS
+[POST] SUCCESS
+[POST] SUCCESS
+[POST] SUCCESS
+[POST] SUCCESS
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://www.scaler.com/topics/java/array-in-java/":{"status":"Revisit"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":["https://leetcode.com/problems/rotate-array/"],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://www.scaler.com/topics/java/array-in-java/":{"status":"Revisit"},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://www.scaler.com/topics/java/array-in-java/":{"status":"Revisit"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":["https://leetcode.com/problems/rotate-array/"],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://www.scaler.com/topics/java/array-in-java/":{"status":"Revisit"},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://www.scaler.com/topics/java/array-in-java/":{"status":"Revisit"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://www.scaler.com/topics/java/array-in-java/":{"status":null}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://www.scaler.com/topics/java/array-in-java/":{"status":"Revisit"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://www.scaler.com/topics/java/array-in-java/":{"status":null}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://www.scaler.com/topics/java/array-in-java/":{"status":"Stuck"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://www.scaler.com/topics/java/array-in-java/":{"status":null}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"S"}}}
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"St"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"Sta"}}}
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"Star"}}}
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"Start"}}}
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"Start "}}}
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"Start w"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"Start wi"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"Start wit"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"Start with"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"Start with "}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"Start with i"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"Start with in"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"Start with ind"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"Start with inde"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"Start with index"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"Start with index "}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"Start with index 0"}}}
+[POST] SUCCESS
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"Start with index 0\n"}}}
+[POST] SUCCESS
+[POST] SUCCESS
+[POST] SUCCESS
+[POST] SUCCESS
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note."},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"Start with index 0\n"},"https://www.scaler.com/topics/java/one-dimensional-array-in-java/":{"status":"Stuck"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":[],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note.","status":"Revisit"},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":null,"notes":"Start with index 0\n"},"https://www.scaler.com/topics/java/one-dimensional-array-in-java/":{"status":"Stuck"}}}
+[POST] SUCCESS
+[POST] REQ.BODY: {"solved":["https://www.scaler.com/topics/java/array-in-java/"],"userProgress":{"https://www.scaler.com/topics/data-structures/array-data-structure/":{"notes":"This is a test note.","status":"Revisit"},"https://leetcode.com/problems/rotate-array/":{"status":"Completed"},"https://www.scaler.com/topics/java/array-in-java/":{"status":"Completed","notes":"Start with index 0\n"},"https://www.scaler.com/topics/java/one-dimensional-array-in-java/":{"status":"Stuck"}}}
+[POST] SUCCESS

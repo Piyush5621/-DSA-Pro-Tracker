@@ -5,6 +5,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { AnimatePresence } from 'framer-motion';
 import Home from './Home';
 import Sheet from './Sheet';
+import Profile from './Profile';
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -13,6 +14,7 @@ const AnimatedRoutes = () => {
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Home />} />
         <Route path="/sheet" element={<Sheet />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </AnimatePresence>
   );

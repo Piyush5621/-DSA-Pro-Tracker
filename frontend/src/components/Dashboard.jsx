@@ -59,7 +59,7 @@ const Dashboard = ({ totalQuestions }) => {
     ];
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {cards.map((card, i) => {
                 const Icon = card.icon;
                 return (
@@ -70,11 +70,13 @@ const Dashboard = ({ totalQuestions }) => {
                         initial="hidden"
                         animate="visible"
                         whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                        className={`glass-card rounded-2xl p-5 flex flex-col gap-3 shadow-xl ${card.glow}`}
+                        className={`relative overflow-hidden rounded-2xl p-6 flex flex-col gap-4 shadow-2xl bg-white/50 dark:bg-slate-900/40 backdrop-blur-md border border-slate-200/50 dark:border-slate-800/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.4)] ${card.glow}`}
                     >
+                        {/* Subtle background glow effect on hover */}
+                        <div className={`absolute -inset-4 bg-gradient-to-br ${card.gradient} opacity-0 group-hover:opacity-[0.03] dark:group-hover:opacity-10 transition-opacity duration-500`} />
                         {/* Header */}
-                        <div className="flex items-center justify-between">
-                            <span className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                        <div className="flex items-center justify-between relative z-10">
+                            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
                                 {card.label}
                             </span>
                             <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${card.gradient} flex items-center justify-center shadow-lg`}>
@@ -83,11 +85,11 @@ const Dashboard = ({ totalQuestions }) => {
                         </div>
 
                         {/* Value */}
-                        <div>
-                            <p className={`text-4xl font-black ${card.textColor} leading-none`}>
+                        <div className="relative z-10 mt-1">
+                            <p className={`text-5xl font-black tracking-tight ${card.textColor} leading-none`}>
                                 {card.value}
                             </p>
-                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 font-medium">{card.sub}</p>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 font-medium">{card.sub}</p>
                         </div>
 
                         {/* Optional Progress bar */}

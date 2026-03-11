@@ -18,16 +18,42 @@ export const ProgressProvider = ({ children }) => {
       setLoading(false);
       return;
     }
+
+    // Attempt local load immediately
+    const localSolved = localStorage.getItem(`solved_${user.uid}`);
+    const localProgress = localStorage.getItem(`progress_${user.uid}`);
+    if (localSolved) setSolved(JSON.parse(localSolved));
+    if (localProgress) setUserProgress(JSON.parse(localProgress));
+
     const fetchProgress = async () => {
       try {
         const token = await user.getIdToken();
         const { data } = await axios.get('/api/progress', {
           headers: { Authorization: `Bearer ${token}` }
         });
-        setSolved(data.solved || []);
-        setUserProgress(data.userProgress || {});
+
+        // Merge fetched data over local data or fallback to local
+        let serverSolved = data.solved;
+        let serverProgress = data.userProgress;
+
+        if ((!serverSolved || serverSolved.length === 0) && localSolved) {
+          serverSolved = JSON.parse(localSolved);
+        }
+        if ((!serverProgress || Object.keys(serverProgress).length === 0) && localProgress) {
+          serverProgress = JSON.parse(localProgress);
+        }
+
+        serverSolved = serverSolved || [];
+        serverProgress = serverProgress || {};
+
+        setSolved(serverSolved);
+        setUserProgress(serverProgress);
+
+        // Update local with absolute truth
+        localStorage.setItem(`solved_${user.uid}`, JSON.stringify(serverSolved));
+        localStorage.setItem(`progress_${user.uid}`, JSON.stringify(serverProgress));
       } catch (err) {
-        console.error("Failed to fetch progress", err);
+        console.error("Failed to fetch progress from backend, using local state", err);
       } finally {
         setLoading(false);
       }
@@ -56,6 +82,8 @@ export const ProgressProvider = ({ children }) => {
       }
     }
     setUserProgress(newProgress);
+    localStorage.setItem(`solved_${user.uid}`, JSON.stringify(newSolved));
+    localStorage.setItem(`progress_${user.uid}`, JSON.stringify(newProgress));
 
     try {
       const token = await user.getIdToken();
@@ -86,6 +114,8 @@ export const ProgressProvider = ({ children }) => {
     }
 
     setUserProgress(newProgress);
+    localStorage.setItem(`solved_${user.uid}`, JSON.stringify(newSolved));
+    localStorage.setItem(`progress_${user.uid}`, JSON.stringify(newProgress));
 
     try {
       const token = await user.getIdToken();

@@ -26,18 +26,16 @@ const TopicTree = ({ node, depth = 0 }) => {
   const isTopLevel = depth === 0;
 
   return (
-    <div className={isTopLevel ? 'mb-3' : 'ml-4 mt-2'}>
+    <div className={isTopLevel ? '' : 'ml-4 mt-2'}>
       {hasChildren && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className={`group flex items-center w-full text-left transition-all duration-200 rounded-xl
+          className={`group flex items-center w-full text-left transition-all duration-200 
             ${isTopLevel
-              ? `px-4 py-3.5 ${expanded
-                ? 'bg-blue-50/80 dark:bg-blue-900/20 border border-blue-200/60 dark:border-blue-800/40 shadow-sm'
-                : 'bg-white/70 dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/40 hover:bg-slate-50 dark:hover:bg-slate-800/80 hover:border-slate-300/60 dark:hover:border-slate-600/50 hover:shadow-sm backdrop-blur-sm'}`
-              : `px-3 py-2.5 ${expanded
-                ? 'bg-slate-100/80 dark:bg-slate-800/40'
-                : 'hover:bg-slate-50 dark:hover:bg-slate-800/30'}`
+              ? `px-4 py-3.5 border-b border-slate-200/50 dark:border-white/5 hover:bg-slate-50/80 dark:hover:bg-white/[0.03] ${expanded ? 'bg-slate-50/50 dark:bg-white/[0.02]' : 'bg-transparent'}`
+              : `px-3 py-2.5 rounded-xl ${expanded
+                ? 'bg-slate-100/50 dark:bg-slate-800/30'
+                : 'hover:bg-slate-50 dark:hover:bg-slate-800/40'}`
             }`}
         >
           {/* Folder icon with gradient */}
@@ -63,8 +61,8 @@ const TopicTree = ({ node, depth = 0 }) => {
           <span className={`flex-1 font-semibold tracking-tight truncate
             ${isTopLevel
               ? expanded
-                ? 'text-blue-700 dark:text-blue-300 text-[15px]'
-                : 'text-slate-700 dark:text-slate-200 text-[15px] group-hover:text-blue-600 dark:group-hover:text-blue-400'
+                ? 'text-slate-900 dark:text-white text-[15px]'
+                : 'text-slate-700 dark:text-slate-300 text-[15px] group-hover:text-slate-900 dark:group-hover:text-white'
               : expanded
                 ? 'text-slate-700 dark:text-slate-300 text-[13px]'
                 : 'text-slate-600 dark:text-slate-400 text-[13px] group-hover:text-slate-800 dark:group-hover:text-slate-200'

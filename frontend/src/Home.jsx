@@ -3,6 +3,8 @@ import { Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FcGoogle } from 'react-icons/fc';
 import { ChevronRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import {
   BlueprintGridBackground,
   MockupDashboard,
@@ -14,6 +16,22 @@ import {
 
 const Home = () => {
   const { user, login } = useAuth();
+  const [stats, setStats] = useState({ activeUsers: 1, totalRegistered: 1 });
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await axios.get('/api/stats');
+        setStats(res.data);
+      } catch (err) {
+        console.error('Failed to fetch stats', err);
+      }
+    };
+    fetchStats();
+    // Refresh stats periodically
+    const interval = setInterval(fetchStats, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   if (user) return <Navigate to="/sheet" replace />;
 
@@ -27,9 +45,9 @@ const Home = () => {
           DSA<span className="text-[#2DD4BF]">Pro</span>
         </div>
         <div className="hidden md:flex items-center gap-6 font-mono text-sm text-slate-500 bg-[#111] py-2 px-5 rounded-full border border-slate-800 shadow-md">
-          <span>user_count: <span className="text-[#8B5CF6]">13.4k</span></span>
+          <span>registered_accounts: <span className="text-[#8B5CF6]">{stats.totalRegistered.toLocaleString()}</span></span>
           <span className="flex items-center gap-2">
-            status: <span className="w-2 h-2 bg-[#2DD4BF] rounded-full animate-pulse shadow-[0_0_8px_#2DD4BF]"></span> <span className="text-[#2DD4BF]">ONLINE</span>
+            live_users: <span className="w-2 h-2 bg-[#2DD4BF] rounded-full animate-pulse shadow-[0_0_8px_#2DD4BF]"></span> <span className="text-[#2DD4BF]">{stats.activeUsers}</span>
           </span>
           <span>// 2500_PROBLEMS_INDEXED</span>
         </div>

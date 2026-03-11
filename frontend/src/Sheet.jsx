@@ -1,40 +1,130 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useAuth } from './context/AuthContext';
 import { useProgress } from './context/ProgressContext';
-import TopicTree from './components/Sheet/TopicTree';
-import QuestionLink from './components/Sheet/QuestionLink';
-import Dashboard from './components/Dashboard';
 import Navbar from './components/Navbar';
-import axios from 'axios';
-import { Search, BookOpen, X, Loader2, ListFilter } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-
+import Sidebar from './components/Sheet/Sidebar';
+import DataTable from './components/Sheet/DataTable';
+import { BookOpen, Loader2, TrendingUp, CheckCircle2, Clock, AlertTriangle } from 'lucide-react';
+import { motion } from 'framer-motion';
 import dsaDataLocal from './data/dsaData.json';
 
-const FILTERS = [
-  { id: 'All', label: 'All Topics' },
-  { id: 'Unsolved', label: 'Unsolved' },
-  { id: 'Solved', label: 'Solved' },
-  { id: 'Revisit', label: 'Need Review' },
-  { id: 'Stuck', label: 'Stuck' },
-];
+  const buildTechniquesData = (data) => {
+    const techMap = {
+        'Two Pointers': { name: 'Two Pointers', type: 'folder', children: [], links: [] },
+        'Sliding Window': { name: 'Sliding Window', type: 'folder', children: [], links: [] },
+        'Binary Search Variants': { name: 'Binary Search Variants', type: 'folder', children: [], links: [] },
+        'Prefix Sum': { name: 'Prefix Sum', type: 'folder', children: [], links: [] },
+        'Recursion Patterns': { name: 'Recursion Patterns', type: 'folder', children: [], links: [] },
+        'Backtracking': { name: 'Backtracking', type: 'folder', children: [], links: [] },
+        'DP Patterns': { name: 'DP Patterns', type: 'folder', children: [], links: [] },
+        'Graph Traversal': { name: 'Graph Traversal', type: 'folder', children: [], links: [] },
+        'Divide & Conquer': { name: 'Divide & Conquer', type: 'folder', children: [], links: [] },
+        'Tree Traversal': { name: 'Tree Traversal', type: 'folder', children: [], links: [] },
+        'Linked List Techniques': { name: 'Linked List Techniques', type: 'folder', children: [], links: [] },
+        'Stack & Queue': { name: 'Stack & Queue', type: 'folder', children: [], links: [] },
+        'Hashing Techniques': { name: 'Hashing Techniques', type: 'folder', children: [], links: [] },
+        'Bit Manipulation': { name: 'Bit Manipulation', type: 'folder', children: [], links: [] },
+        'Sorting Techniques': { name: 'Sorting Techniques', type: 'folder', children: [], links: [] },
+        'Heap / Priority Queue': { name: 'Heap / Priority Queue', type: 'folder', children: [], links: [] },
+        'Trie': { name: 'Trie', type: 'folder', children: [], links: [] },
+        'String Matching': { name: 'String Matching', type: 'folder', children: [], links: [] },
+        'Other': { name: 'Other', type: 'folder', children: [], links: [] },
+    };
+
+    const extractToTech = (nodes, parentPath) => {
+        nodes.forEach(n => {
+            if (n.type === 'link') {
+                const pathStr = (parentPath + ' ' + n.name).toLowerCase();
+                if (pathStr.includes('sliding window')) techMap['Sliding Window'].links.push(n);
+                else if (pathStr.includes('two pointer') || pathStr.includes('two-pointer')) techMap['Two Pointers'].links.push(n);
+                else if (pathStr.includes('binary search')) techMap['Binary Search Variants'].links.push(n);
+                else if (pathStr.includes('prefix sum')) techMap['Prefix Sum'].links.push(n);
+                else if (pathStr.includes('backtrack')) techMap['Backtracking'].links.push(n);
+                else if (pathStr.includes('recursion') || pathStr.includes('recursive')) techMap['Recursion Patterns'].links.push(n);
+                else if (pathStr.includes('dp') || pathStr.includes('dynamic program')) techMap['DP Patterns'].links.push(n);
+                else if (pathStr.includes('graph') || pathStr.includes('bfs') || pathStr.includes('dfs')) techMap['Graph Traversal'].links.push(n);
+                else if (pathStr.includes('divide') || pathStr.includes('conquer') || pathStr.includes('merge sort')) techMap['Divide & Conquer'].links.push(n);
+                else if (pathStr.includes('tree') || pathStr.includes('bst') || pathStr.includes('order')) techMap['Tree Traversal'].links.push(n);
+                else if (pathStr.includes('linked list')) techMap['Linked List Techniques'].links.push(n);
+                else if (pathStr.includes('stack') || pathStr.includes('queue')) techMap['Stack & Queue'].links.push(n);
+                else if (pathStr.includes('hash') || pathStr.includes('map')) techMap['Hashing Techniques'].links.push(n);
+                else if (pathStr.includes('bit ') || pathStr.includes('xor') || pathStr.includes('bitwise') || pathStr.includes('bit manipulation')) techMap['Bit Manipulation'].links.push(n);
+                else if (pathStr.includes('sort')) techMap['Sorting Techniques'].links.push(n);
+                else if (pathStr.includes('heap') || pathStr.includes('priority queue')) techMap['Heap / Priority Queue'].links.push(n);
+                else if (pathStr.includes('trie')) techMap['Trie'].links.push(n);
+                else if (pathStr.includes('string match') || pathStr.includes('kmp') || pathStr.includes('rabin')) techMap['String Matching'].links.push(n);
+                else techMap['Other'].links.push(n);
+            } else {
+                if (n.links) {
+                    n.links.forEach((l) => {
+                        const pathStr = (parentPath + ' ' + n.name + ' ' + l.name).toLowerCase();
+                        if (pathStr.includes('sliding window')) techMap['Sliding Window'].links.push(l);
+                        else if (pathStr.includes('two pointer') || pathStr.includes('two-pointer')) techMap['Two Pointers'].links.push(l);
+                        else if (pathStr.includes('binary search')) techMap['Binary Search Variants'].links.push(l);
+                        else if (pathStr.includes('prefix sum')) techMap['Prefix Sum'].links.push(l);
+                        else if (pathStr.includes('backtrack')) techMap['Backtracking'].links.push(l);
+                        else if (pathStr.includes('recursion') || pathStr.includes('recursive')) techMap['Recursion Patterns'].links.push(l);
+                        else if (pathStr.includes('dp') || pathStr.includes('dynamic program')) techMap['DP Patterns'].links.push(l);
+                        else if (pathStr.includes('graph') || pathStr.includes('bfs') || pathStr.includes('dfs')) techMap['Graph Traversal'].links.push(l);
+                        else if (pathStr.includes('divide') || pathStr.includes('conquer') || pathStr.includes('merge sort')) techMap['Divide & Conquer'].links.push(l);
+                        else if (pathStr.includes('tree') || pathStr.includes('bst') || pathStr.includes('order')) techMap['Tree Traversal'].links.push(l);
+                        else if (pathStr.includes('linked list')) techMap['Linked List Techniques'].links.push(l);
+                        else if (pathStr.includes('stack') || pathStr.includes('queue')) techMap['Stack & Queue'].links.push(l);
+                        else if (pathStr.includes('hash') || pathStr.includes('map')) techMap['Hashing Techniques'].links.push(l);
+                        else if (pathStr.includes('bit ') || pathStr.includes('xor') || pathStr.includes('bitwise') || pathStr.includes('bit manipulation')) techMap['Bit Manipulation'].links.push(l);
+                        else if (pathStr.includes('sort')) techMap['Sorting Techniques'].links.push(l);
+                        else if (pathStr.includes('heap') || pathStr.includes('priority queue')) techMap['Heap / Priority Queue'].links.push(l);
+                        else if (pathStr.includes('trie')) techMap['Trie'].links.push(l);
+                        else if (pathStr.includes('string match') || pathStr.includes('kmp') || pathStr.includes('rabin')) techMap['String Matching'].links.push(l);
+                        else techMap['Other'].links.push(l);
+                    });
+                }
+                if (n.children) extractToTech(n.children, parentPath + ' ' + n.name);
+            }
+        });
+    };
+    extractToTech(data, '');
+    return Object.values(techMap); // Return all to show 0 if empty
+  };
 
 const Sheet = () => {
   const { user } = useAuth();
-  const { solved, userProgress, loading } = useProgress();
+  const { solved, userProgress } = useProgress();
   const [sheetData, setSheetData] = useState([]);
   const [totalQuestions, setTotalQuestions] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterType, setFilterType] = useState('All');
+  const [selectedTopicName, setSelectedTopicName] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   useEffect(() => {
-    // Load local static data instantly without waiting for backend
     setSheetData(dsaDataLocal);
+  }, []);
 
-    // Calculate total questions
+  const sidebarFilteredData = useMemo(() => {
+    if (sheetData.length === 0) return [];
+    
+    // Exact topics provided by user
+    const topicsItems = sheetData;
+    
+    // Techniques built dynamically
+    const techniquesItems = buildTechniquesData(sheetData);
+
+    return [
+      { title: 'Topics', items: topicsItems },
+      { title: 'Techniques', items: techniquesItems }
+    ];
+  }, [sheetData]);
+
+  useEffect(() => {
+    if (sidebarFilteredData.length > 0 && !selectedTopicName) {
+       setSelectedTopicName(sidebarFilteredData[0].items[0].name);
+    }
+  }, [sidebarFilteredData, selectedTopicName]);
+
+  useEffect(() => {
     const countLinks = (nodes) => {
       let count = 0;
-      nodes.forEach(node => {
+      nodes?.forEach(node => {
         if (node.type === 'link') count++;
         else {
           count += node.links?.length || 0;
@@ -43,250 +133,137 @@ const Sheet = () => {
       });
       return count;
     };
-
     setTotalQuestions(countLinks(dsaDataLocal));
   }, []);
 
-  // Flatten the tree for advanced filtering
-  const allLinks = useMemo(() => {
-    const getLinks = (nodes, path = '') => {
-      let res = [];
-      nodes.forEach(n => {
-        if (n.type === 'link') {
-          res.push({ ...n, path });
-        } else {
-          const separator = '<span class="text-slate-300 dark:text-slate-600 mx-1">/</span>';
-          const newPath = path ? `${path}${separator}${n.name}` : n.name;
-          if (n.links?.length) {
-            n.links.forEach(l => res.push({ ...l, path: newPath }));
-          }
-          if (n.children?.length) {
-            res.push(...getLinks(n.children, newPath));
-          }
-        }
-      });
-      return res;
-    };
-    return getLinks(sheetData);
-  }, [sheetData]);
+  const totalSolved = solved.length;
+  const totalStuck = Object.values(userProgress).filter(p => p.status === 'Stuck').length;
+  const totalRevisit = Object.values(userProgress).filter(p => p.status === 'Revisit').length;
+  const percentage = totalQuestions > 0 ? ((totalSolved / totalQuestions) * 100).toFixed(1) : 0;
 
-  // Derived view (Tree vs Flat) based on active search/filter
-  const viewData = useMemo(() => {
-    if (filterType === 'All' && !searchQuery) {
-      return { type: 'tree', data: sheetData };
+  const activeTopicObj = useMemo(() => {
+    for (const section of sidebarFilteredData) {
+      const found = section.items.find(t => t.name === selectedTopicName);
+      if (found) return found;
     }
-
-    let processed = allLinks;
-
-    if (filterType !== 'All') {
-      processed = processed.filter(q => {
-        const isSolved = solved.includes(q.url);
-        const st = userProgress[q.url]?.status;
-
-        if (filterType === 'Unsolved') return !isSolved;
-        if (filterType === 'Solved') return isSolved;
-        if (filterType === 'Revisit') return !isSolved && st === 'Revisit';
-        if (filterType === 'Stuck') return !isSolved && st === 'Stuck';
-        return true;
-      });
-    }
-
-    if (searchQuery) {
-      const qs = searchQuery.toLowerCase();
-      processed = processed.filter(q =>
-        q.name.toLowerCase().includes(qs) || q.path.toLowerCase().includes(qs)
-      );
-    }
-
-    return { type: 'flat', data: processed };
-  }, [sheetData, allLinks, filterType, searchQuery, solved, userProgress]);
+    return null;
+  }, [sidebarFilteredData, selectedTopicName]);
 
   if (!user) {
     if (typeof window !== 'undefined') window.location.href = '/';
     return null;
   }
 
-  // Loading state
   if (sheetData.length === 0) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center gap-4">
-        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-2xl shadow-blue-500/30 animate-pulse">
+      <div className="min-h-screen bg-slate-50 dark:bg-[#080d17] flex flex-col items-center justify-center gap-4">
+        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-2xl shadow-emerald-500/30 animate-pulse">
           <BookOpen size={28} className="text-white" />
         </div>
         <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
           <Loader2 size={18} className="animate-spin" />
-          <span className="text-sm font-medium">Loading your DSA sheet...</span>
+          <span className="text-sm font-bold tracking-widest uppercase">Loading Matrix...</span>
         </div>
       </div>
     );
   }
 
+  const metrics = [
+    { label: 'Completion', val: `${percentage}%`, color: 'text-blue-500 dark:text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20', icon: TrendingUp },
+    { label: 'Solved', val: totalSolved, color: 'text-emerald-500 dark:text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20', icon: CheckCircle2 },
+    { label: 'Need Revisit', val: totalRevisit, color: 'text-amber-500 dark:text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20', icon: Clock },
+    { label: 'Stuck', val: totalStuck, color: 'text-rose-500 dark:text-rose-400', bg: 'bg-rose-500/10 border-rose-500/20', icon: AlertTriangle }
+  ];
+
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 20, transition: { duration: 0.2 } }}
-      transition={{ duration: 0.4 }}
-      className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300"
-    >
-      {/* Subtle background gradient */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-400/5 dark:bg-blue-600/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-400/5 dark:bg-indigo-600/5 rounded-full blur-3xl" />
+    <div className="min-h-screen bg-slate-50 dark:bg-[#030612] transition-colors duration-300 flex flex-col overflow-hidden relative">
+      {/* Background glow mesh for premium feel */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/10 blur-[120px]" />
+         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-emerald-600/10 blur-[120px]" />
       </div>
 
-      <Navbar totalQuestions={totalQuestions} />
+      {/* Top Header */}
+      <div className="relative z-10 w-full">
+         <Navbar totalQuestions={totalQuestions} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      </div>
 
-      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Dashboard Analytics */}
-        <Dashboard totalQuestions={totalQuestions} />
+      {/* Main Layout Grid */}
+      <div className="flex flex-1 overflow-hidden relative z-10 p-2 sm:p-4 gap-4">
+        
+        {/* Left Sidebar - Foldable */}
+        {!searchQuery && (
+           <motion.div 
+             initial={{ width: 288 }}
+             animate={{ width: isSidebarOpen ? 288 : 0, opacity: isSidebarOpen ? 1 : 0, marginInlineEnd: isSidebarOpen ? 0 : -16 }}
+             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+             className="hidden md:flex flex-shrink-0 z-10 h-full overflow-hidden"
+           >
+             <div className="w-72 h-full rounded-3xl bg-white/60 dark:bg-[#09101E]/80 backdrop-blur-xl border border-slate-200 dark:border-white/5 shadow-xl shadow-black/5 dark:shadow-none overflow-hidden flex flex-col items-start">
+               <Sidebar
+                 sections={sidebarFilteredData}
+                 selectedTopic={selectedTopicName}
+                 setSelectedTopic={setSelectedTopicName}
+               />
+             </div>
+           </motion.div>
+        )}
 
-        {/* Sheet Panel */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="glass-card rounded-3xl overflow-hidden shadow-2xl shadow-black/5"
-        >
-          {/* Panel Header */}
-          <div className="px-6 sm:px-8 py-6 border-b border-slate-200/80 dark:border-slate-700/60 bg-white/40 dark:bg-slate-900/40">
-            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-5">
-
-              <div className="flex items-center gap-4">
-                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
-                  <ListFilter size={20} className="text-white" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">
-                    Problem Directory
-                  </h2>
-                  <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mt-0.5">
-                    {totalQuestions} total problems available
-                  </p>
-                </div>
-              </div>
-
-              {/* Controls: Tabs & Search */}
-              <div className="w-full lg:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-
-                {/* Filter Tabs */}
-                <div className="flex bg-slate-100 dark:bg-slate-900/80 p-1 rounded-xl border border-slate-200/60 dark:border-slate-700 w-full sm:w-auto overflow-x-auto custom-scrollbar">
-                  {FILTERS.map(f => {
-                    const isActive = filterType === f.id;
-                    return (
-                      <button
-                        key={f.id}
-                        onClick={() => setFilterType(f.id)}
-                        className={`relative px-4 py-1.5 text-[13px] font-semibold rounded-lg transition-colors whitespace-nowrap
-                          ${isActive ? 'text-blue-700 dark:text-blue-300' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}
-                        `}
-                      >
-                        {isActive && (
-                          <motion.div
-                            layoutId="activeTab"
-                            className="absolute inset-0 bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200/50 dark:border-slate-700"
-                            initial={false}
-                            transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                          />
-                        )}
-                        <span className="relative z-10">{f.label}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Search */}
-                <div className="relative w-full sm:w-64 flex-shrink-0">
-                  <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input
-                    id="topic-search"
-                    type="text"
-                    placeholder="Search anything…"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700 rounded-xl pl-9 pr-9 py-2 text-[13px] outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-400 dark:focus:border-blue-600 text-slate-700 dark:text-slate-300 transition-all placeholder:text-slate-400 shadow-sm"
-                  />
-                  <AnimatePresence>
-                    {searchQuery && (
-                      <motion.button
-                        initial={{ opacity: 0, scale: 0.7 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.7 }}
-                        onClick={() => setSearchQuery('')}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
-                      >
-                        <X size={14} />
-                      </motion.button>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-              </div>
-            </div>
-          </div>
-
-          {/* Topics View */}
-          <div className="p-4 sm:p-6 pb-12 min-h-[400px]">
-            <AnimatePresence mode="wait">
-              {viewData.data.length > 0 ? (
-                <motion.div
-                  key={filterType + searchQuery + viewData.type}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
-                  className={viewData.type === 'flat' ? 'space-y-2' : ''}
+        {/* Central Workspace */}
+        <main className="flex-1 flex flex-col overflow-y-auto custom-scrollbar relative z-0">
+           <div className="w-full px-4 sm:px-8 py-8 flex flex-col">
+              {/* Sidebar Toggle Button for Desktop */}
+              {!searchQuery && (
+                <button
+                   onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                   className="hidden md:flex absolute top-4 left-4 z-20 w-8 h-8 rounded-full bg-white dark:bg-[#121826] border border-slate-200 dark:border-white/10 items-center justify-center text-slate-500 shadow-sm hover:text-slate-800 dark:hover:text-amber-400 transition-colors"
                 >
-                  {viewData.type === 'tree' ? (
-                    // Render Folders
-                    viewData.data.map((topic, idx) => (
-                      <TopicTree key={idx} node={topic} />
-                    ))
-                  ) : (
-                    // Render Flat Links
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                      {viewData.data.map((link, idx) => (
-                        <div key={idx} className="h-full">
-                          <QuestionLink name={link.name} url={link.url} path={link.path} />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="empty"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="py-24 flex flex-col items-center justify-center text-center"
-                >
-                  <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800/50 rounded-full flex items-center justify-center mb-5">
-                    <ListFilter size={32} className="text-slate-300 dark:text-slate-600" />
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 mb-1">
-                    No problems found
-                  </h3>
-                  <p className="text-slate-500 dark:text-slate-400 font-medium max-w-sm">
-                    {searchQuery
-                      ? `We couldn't find any questions matching "${searchQuery}".`
-                      : `You don't have any questions marked as "${filterType}" yet.`}
-                  </p>
-                  {(searchQuery || filterType !== 'All') && (
-                    <button
-                      onClick={() => { setSearchQuery(''); setFilterType('All'); }}
-                      className="mt-6 px-5 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-semibold rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"
-                    >
-                      Clear all filters
-                    </button>
-                  )}
-                </motion.div>
+                   <motion.div animate={{ rotate: isSidebarOpen ? 0 : 180 }}>
+                      <BookOpen size={14} />
+                   </motion.div>
+                </button>
               )}
-            </AnimatePresence>
-          </div>
-        </motion.div>
-      </main>
-    </motion.div>
+
+              {/* Metric Row */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                 {metrics.map((m, i) => {
+                    const Icon = m.icon;
+                    return (
+                      <motion.div 
+                        key={m.label}
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        className={`flex items-center gap-4 py-4 px-5 rounded-3xl border bg-white/60 dark:bg-[#09101E]/80 backdrop-blur-xl shadow-md dark:border-white/5 dark:shadow-none ${m.bg.replace('bg-', 'hover:bg-').replace('border-', 'hover:border-')} transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group relative overflow-hidden`}
+                      >
+                         <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/0 dark:from-white/5 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                         <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border ${m.bg} relative z-10 shadow-inner`}>
+                            <Icon size={18} className={m.color} />
+                         </div>
+                         <div className="flex flex-col">
+                            <span className="text-[10px] font-bold tracking-widest uppercase text-slate-400 dark:text-slate-500">
+                               {m.label}
+                            </span>
+                            <span className={`text-xl font-black tracking-tight leading-none mt-1 ${m.color}`}>
+                               {m.val}
+                            </span>
+                         </div>
+                      </motion.div>
+                    )
+                 })}
+              </div>
+
+              {/* Data Table */}
+              <DataTable 
+                  topic={activeTopicObj} 
+                  searchQuery={searchQuery} 
+                  solved={solved}
+              />
+
+           </div>
+        </main>
+      </div>
+    </div>
   );
 };
 

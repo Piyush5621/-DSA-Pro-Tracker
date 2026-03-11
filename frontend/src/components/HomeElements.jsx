@@ -47,7 +47,7 @@ export const MockupDashboard = () => {
                 <div className="w-3 h-3 rounded-full bg-red-500" />
                 <div className="w-3 h-3 rounded-full bg-yellow-500" />
                 <div className="w-3 h-3 rounded-full bg-green-500" />
-                <span className="ml-2 text-xs font-mono text-slate-500">// dashboard.tsx</span>
+                <span className="ml-2 text-xs font-mono text-slate-500">{"// dashboard.tsx"}</span>
             </div>
 
             {/* Heatmap */}
@@ -76,7 +76,7 @@ export const MockupDashboard = () => {
                     {'  '}const dp = <code className="text-[#8B5CF6]">new</code> Array(n).fill(<code className="text-yellow-300">0</code>);{'\n'}
                     {'  '}dp[<code className="text-yellow-300">0</code>] = <code className="text-yellow-300">1</code>;{'\n'}
                     {'  '}<code className="text-[#8B5CF6]">for</code> (let i = <code className="text-yellow-300">1</code>; i &lt; n; i++) {'{\n'}
-                    {'    '}<span className="text-slate-500 italic">// Calculate transitions</span>{'\n'}
+                    {'    '}<span className="text-slate-500 italic">{"// Calculate transitions"}</span>{'\n'}
                     {'    '}dp[i] = dp[i-<code className="text-yellow-300">1</code>] + cost(i);{'\n'}
                     {'  }\n'}
                     {'  '}<code className="text-[#8B5CF6]">return</code> dp[n-<code className="text-yellow-300">1</code>];{'\n'}
@@ -110,7 +110,7 @@ export const BentoChart = () => {
         <div className="flex flex-col h-full justify-between">
             <div className="mb-6">
                 <h3 className="text-xl font-bold text-white tracking-tight mb-1">Problems Solved Over Time</h3>
-                <span className="text-sm font-mono text-[#2DD4BF]">// CONSISTENCY_TREND</span>
+                <span className="text-sm font-mono text-[#2DD4BF]">{"// CONSISTENCY_TREND"}</span>
             </div>
             <div className="flex-1 flex items-end gap-2 md:gap-3 border-b-2 border-l-2 border-slate-800 p-3 pb-0 relative">
                 <div className="absolute left-[-30px] bottom-0 text-[10px] font-mono text-slate-600">0</div>
@@ -141,7 +141,7 @@ export const BentoPlatforms = () => {
         <div className="flex flex-col h-full gap-5">
             <div>
                 <h3 className="text-xl font-bold text-white tracking-tight mb-1">Sync Platforms</h3>
-                <span className="text-sm font-mono text-[#8B5CF6]">// MULTIPLE_SOURCES_SUPPORTED</span>
+                <span className="text-sm font-mono text-[#8B5CF6]">{"// MULTIPLE_SOURCES_SUPPORTED"}</span>
             </div>
             <div className="flex flex-col gap-3 flex-1 overflow-y-auto pr-1 no-scrollbar pt-2">
                 {platforms.map((p, i) => (
@@ -161,10 +161,10 @@ export const BentoNotes = () => {
         <div className="flex flex-col h-full gap-5">
             <div>
                 <h3 className="text-xl font-bold text-white tracking-tight mb-1">Smart Notes</h3>
-                <span className="text-sm font-mono text-[#2DD4BF]">// RETAIN_KNOWLEDGE()</span>
+                <span className="text-sm font-mono text-[#2DD4BF]">{"// RETAIN_KNOWLEDGE()"}</span>
             </div>
             <div className="bg-[#050505] p-6 rounded-2xl border border-slate-800 font-mono text-sm md:text-base text-slate-400 flex-1 flex flex-col justify-center leading-relaxed shadow-inner">
-                <p className="text-[#8B5CF6] mb-3 font-bold select-none cursor-default opacity-80">/* Approach: 0/1 Knapsack */</p>
+                <p className="text-[#8B5CF6] mb-3 font-bold select-none cursor-default opacity-80">{"/* Approach: 0/1 Knapsack */"}</p>
                 <div className="space-y-1">
                     <p><span className="text-slate-500">1.</span> State: dp[i][w] = max val using first i items.</p>
                     <p><span className="text-slate-500">2.</span> Transition:</p>
@@ -174,7 +174,7 @@ export const BentoNotes = () => {
                     <p className="pl-12 text-slate-200">dp[i][w] = dp[i-1][w];</p>
                     <p className="pl-6">{'}'}</p>
                 </div>
-                <p className="mt-4 text-yellow-500/80 border-l-2 border-yellow-500/50 pl-3">// Edge case: empty wt array returns 0</p>
+                <p className="mt-4 text-yellow-500/80 border-l-2 border-yellow-500/50 pl-3">{"// Edge case: empty wt array returns 0"}</p>
             </div>
         </div>
     );

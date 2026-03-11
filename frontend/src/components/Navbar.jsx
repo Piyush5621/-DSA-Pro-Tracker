@@ -1,7 +1,7 @@
 import { useAuth } from '../context/AuthContext';
 import { useProgress } from '../context/ProgressContext';
 import { useTheme } from '../context/ThemeContext';
-import { LogOut, Sun, Moon, Target, BarChart2, Users, UserCircle, Search, X } from 'lucide-react';
+import { LogOut, Sun, Moon, Target, Users, UserCircle, Search, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
@@ -28,7 +28,6 @@ const Navbar = ({ totalQuestions, searchQuery, setSearchQuery }) => {
         };
     }, []);
 
-    const pct = totalQuestions > 0 ? ((solved.length / totalQuestions) * 100).toFixed(0) : 0;
 
     return (
         <header className="w-full bg-white dark:bg-[#0B1120] border-b border-slate-200 dark:border-white/5 sticky top-0 z-50 shadow-sm dark:shadow-none">

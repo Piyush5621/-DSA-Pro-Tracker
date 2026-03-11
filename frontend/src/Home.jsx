@@ -49,7 +49,7 @@ const Home = () => {
           <span className="flex items-center gap-2">
             live_users: <span className="w-2 h-2 bg-[#2DD4BF] rounded-full animate-pulse shadow-[0_0_8px_#2DD4BF]"></span> <span className="text-[#2DD4BF]">{stats.activeUsers}</span>
           </span>
-          <span>// 2500_PROBLEMS_INDEXED</span>
+          <span>{"// 2500_PROBLEMS_INDEXED"}</span>
         </div>
       </div>
 

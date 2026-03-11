@@ -107,5 +107,15 @@ app.get('/api/stats', async (req, res) => {
   }
 });
 
+const path = require('path');
+
+// Serve the frontend build
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+// Catch-all to serve index.html for React Router
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+});
+
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT} with Socket.IO`));

@@ -19,16 +19,12 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Track active users
-let activeUsers = 0;
-
+// Track active users using io.engine.clientsCount
 io.on('connection', (socket) => {
-  activeUsers++;
-  io.emit('activeUsers', activeUsers);
+  io.emit('activeUsers', io.engine.clientsCount);
 
   socket.on('disconnect', () => {
-    activeUsers--;
-    io.emit('activeUsers', activeUsers);
+    io.emit('activeUsers', io.engine.clientsCount);
   });
 });
 
@@ -102,12 +98,12 @@ app.get('/api/stats', async (req, res) => {
     const totalUsers = listUsersResult.users.length;
     
     res.json({
-        activeUsers: activeUsers,
+        activeUsers: io.engine.clientsCount,
         totalRegistered: Math.max(totalUsers, 1)
     });
   } catch (error) {
     console.error("Stats fetch error:", error.message);
-    res.json({ activeUsers, totalRegistered: 1 });
+    res.json({ activeUsers: io.engine.clientsCount, totalRegistered: 1 });
   }
 });
 

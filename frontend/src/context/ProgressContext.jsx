@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
 import { useAuth } from './AuthContext';
 import axios from 'axios';
 
@@ -61,74 +61,108 @@ export const ProgressProvider = ({ children }) => {
     fetchProgress();
   }, [user]);
 
-  const toggleSolved = async (url) => {
+  const toggleSolved = useCallback(async (url) => {
     if (!user) return;
-    const isCurrentlySolved = solved.includes(url);
-    const newSolved = isCurrentlySolved
-      ? solved.filter(u => u !== url)
-      : [...solved, url];
-    setSolved(newSolved);
+    
+    // Use functional update to get freshest state in Case of rapid clicks, 
+    // but for the side effects we need the values now.
+    // Actually, reading from current scope is fine since handled in useCallback [user]
+    // But to be safest with rapid clicks, we should use functional update for state
+    // and just calculate the side-effect values.
+    
+    setSolved(prevSolved => {
+      setUserProgress(prevProgress => {
+        const isCurrentlySolved = prevSolved.includes(url);
+        const newSolved = isCurrentlySolved
+          ? prevSolved.filter(u => u !== url)
+          : [...prevSolved, url];
 
-    // Also update the status in userProgress
-    const newProgress = { ...userProgress };
-    if (!isCurrentlySolved) {
-      newProgress[url] = { ...(newProgress[url] || {}), status: 'Completed' };
-    } else {
-      if (newProgress[url]) {
-        delete newProgress[url].status;
-        if (Object.keys(newProgress[url]).length === 0) {
-          delete newProgress[url];
+        const newProgress = { ...prevProgress };
+        if (!isCurrentlySolved) {
+          newProgress[url] = { ...(newProgress[url] || {}), status: 'Completed' };
+        } else {
+          if (newProgress[url]) {
+            delete newProgress[url].status;
+            if (Object.keys(newProgress[url]).length === 0) {
+              delete newProgress[url];
+            }
+          }
         }
-      }
-    }
-    setUserProgress(newProgress);
-    localStorage.setItem(`solved_${user.uid}`, JSON.stringify(newSolved));
-    localStorage.setItem(`progress_${user.uid}`, JSON.stringify(newProgress));
 
-    try {
-      const token = await user.getIdToken();
-      await axios.post('/api/progress', { solved: newSolved, userProgress: newProgress }, {
-        headers: { Authorization: `Bearer ${token}` }
+        // Apply side effects
+        localStorage.setItem(`solved_${user.uid}`, JSON.stringify(newSolved));
+        localStorage.setItem(`progress_${user.uid}`, JSON.stringify(newProgress));
+        
+        // Async API call (token fetch is also async)
+        (async () => {
+           try {
+             const token = await user.getIdToken();
+             await axios.post('/api/progress', { solved: newSolved, userProgress: newProgress }, {
+               headers: { Authorization: `Bearer ${token}` }
+             });
+           } catch (err) {
+             console.error("Failed to save progress", err);
+           }
+        })();
+
+        return newProgress;
       });
-    } catch (err) {
-      console.error("Failed to save progress", err);
-    }
-  };
+      
+      const isCurrentlySolved = prevSolved.includes(url);
+      return isCurrentlySolved ? prevSolved.filter(u => u !== url) : [...prevSolved, url];
+    });
+  }, [user]);
 
-  const updateQuestionData = async (url, data) => {
+  const updateQuestionData = useCallback(async (url, data) => {
     if (!user) return;
 
-    const newProgress = {
-      ...userProgress,
-      [url]: { ...(userProgress[url] || {}), ...data }
-    };
+    setUserProgress(prevProgress => {
+      setSolved(prevSolved => {
+        const newProgress = {
+          ...prevProgress,
+          [url]: { ...(prevProgress[url] || {}), ...data }
+        };
 
-    // Auto-sync solved array if status is 'Completed'
-    let newSolved = [...solved];
-    if (data.status === 'Completed' && !solved.includes(url)) {
-      newSolved.push(url);
-      setSolved(newSolved);
-    } else if (data.status && data.status !== 'Completed' && solved.includes(url)) {
-      newSolved = solved.filter(u => u !== url);
-      setSolved(newSolved);
-    }
+        let newSolved = [...prevSolved];
+        if (data.status === 'Completed' && !prevSolved.includes(url)) {
+          newSolved.push(url);
+        } else if (data.status && data.status !== 'Completed' && prevSolved.includes(url)) {
+          newSolved = prevSolved.filter(u => u !== url);
+        }
 
-    setUserProgress(newProgress);
-    localStorage.setItem(`solved_${user.uid}`, JSON.stringify(newSolved));
-    localStorage.setItem(`progress_${user.uid}`, JSON.stringify(newProgress));
+        localStorage.setItem(`solved_${user.uid}`, JSON.stringify(newSolved));
+        localStorage.setItem(`progress_${user.uid}`, JSON.stringify(newProgress));
 
-    try {
-      const token = await user.getIdToken();
-      await axios.post('/api/progress', { solved: newSolved, userProgress: newProgress }, {
-        headers: { Authorization: `Bearer ${token}` }
+        (async () => {
+          try {
+            const token = await user.getIdToken();
+            await axios.post('/api/progress', { solved: newSolved, userProgress: newProgress }, {
+              headers: { Authorization: `Bearer ${token}` }
+            });
+          } catch (err) {
+            console.error("Failed to save progress data", err);
+          }
+        })();
+
+        return newSolved;
       });
-    } catch (err) {
-      console.error("Failed to save progress data", err);
-    }
-  };
+      return {
+        ...prevProgress,
+        [url]: { ...(prevProgress[url] || {}), ...data }
+      };
+    });
+  }, [user]);
+
+  const value = useMemo(() => ({
+    solved, 
+    userProgress, 
+    toggleSolved, 
+    updateQuestionData, 
+    loading
+  }), [solved, userProgress, toggleSolved, updateQuestionData, loading]);
 
   return (
-    <ProgressContext.Provider value={{ solved, userProgress, toggleSolved, updateQuestionData, loading }}>
+    <ProgressContext.Provider value={value}>
       {children}
     </ProgressContext.Provider>
   );

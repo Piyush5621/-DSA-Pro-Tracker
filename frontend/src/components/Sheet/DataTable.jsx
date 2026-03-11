@@ -1,7 +1,133 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, memo, useCallback } from 'react';
 import { useProgress } from '../../context/ProgressContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, CheckCircle2, ChevronDown, ListFilter, Circle, Clock, AlertTriangle, PenSquare } from 'lucide-react';
+import { Check, ListFilter, Clock, AlertTriangle, PenSquare } from 'lucide-react';
+
+const QuestionRow = memo(({ 
+  link, 
+  idx, 
+  isSolved, 
+  qData, 
+  openNotes, 
+  setOpenNotes, 
+  handleToggle, 
+  updateQuestionData, 
+  getBadges 
+}) => {
+  const { platform, type } = getBadges(link.url);
+  const currentStatus = isSolved ? 'Completed' : (qData.status || null);
+  const currentNotes = qData.notes || '';
+
+  return (
+    <div className="mb-2 w-full">
+      <div className="grid grid-cols-12 gap-3 sm:gap-4 px-4 sm:px-6 py-3.5 sm:py-3 rounded-2xl bg-white/60 dark:bg-[#0E1525]/60 backdrop-blur-md border border-slate-200 dark:border-white/5 hover:border-blue-500/30 dark:hover:border-blue-500/30 hover:bg-white dark:hover:bg-[#131b2c]/80 transition-all duration-300 group items-center shadow-sm hover:shadow-lg dark:hover:shadow-blue-500/5 relative overflow-hidden">
+        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+        {/* Index */}
+        <div className="col-span-1 hidden sm:flex items-center">
+          <span className="text-xs font-mono font-bold text-slate-300 dark:text-slate-600 group-hover:text-slate-400 dark:group-hover:text-slate-400 transition-colors">
+            {String(idx + 1).padStart(2, '0')}
+          </span>
+        </div>
+
+        {/* Problem Name & Path */}
+        <div className="col-span-9 sm:col-span-6 flex flex-col justify-center">
+          <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-[13px] sm:text-[14px] font-bold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-emerald-400 truncate tracking-tight transition-colors">
+            {link.name}
+          </a>
+          {link.path && (
+            <span className="text-[10px] text-slate-400 truncate font-semibold uppercase tracking-widest mt-0.5">
+              {link.path.replace(/\//g, '•')}
+            </span>
+          )}
+        </div>
+
+        {/* Platform/Type Badges */}
+        <div className="col-span-3 hidden sm:flex items-center gap-2">
+          <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-widest border ${platform.color}`}>
+            {platform.text}
+          </span>
+          <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-widest border hidden md:inline-block ${type.color}`}>
+            {type.text}
+          </span>
+        </div>
+
+        {/* Actions & Status Checkbox */}
+        <div className="col-span-3 sm:col-span-2 flex items-center justify-end gap-2 pr-2 md:pr-0">
+          {/* Status Buttons */}
+          <div className="hidden lg:flex items-center gap-1 mr-2">
+            {STATUS_OPTIONS.map(opt => {
+              const Icon = opt.icon;
+              const isOptActive = currentStatus === opt.value;
+              return (
+                <button
+                  key={opt.value}
+                  title={opt.label}
+                  onClick={() => updateQuestionData(link.url, { status: isOptActive ? null : opt.value })}
+                  className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border
+                    ${isOptActive 
+                      ? `bg-slate-100 dark:bg-white/10 ${opt.colorClass} border-transparent` 
+                      : `text-slate-300 dark:text-slate-600 border-transparent hover:text-slate-500 dark:hover:text-slate-400 ${opt.bg}`}`}
+                >
+                  <Icon size={14} />
+                </button>
+              )
+            })}
+            <button
+              title="Notes"
+              onClick={() => setOpenNotes(openNotes === link.url ? null : link.url)}
+              className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border
+                ${openNotes === link.url || currentNotes
+                  ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-500 border-transparent'
+                  : 'text-slate-300 dark:text-slate-600 border-transparent hover:text-slate-500 dark:hover:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5'}`}
+            >
+              <PenSquare size={14} />
+            </button>
+          </div>
+
+          <button
+            onClick={() => handleToggle(link.url)}
+            className={`w-6 h-6 rounded-md flex items-center justify-center transition-all duration-300 border shadow-sm flex-shrink-0
+              ${isSolved 
+                ? 'bg-emerald-500 border-emerald-500 dark:bg-emerald-500/20 dark:border-emerald-500/50 text-white dark:text-emerald-400 shadow-emerald-500/20' 
+                : 'bg-white border-slate-300 dark:bg-transparent dark:border-slate-700 text-transparent hover:border-emerald-500/50 dark:hover:border-emerald-500/50'}`}
+          >
+            {isSolved && <Check size={14} strokeWidth={3} />}
+          </button>
+        </div>
+      </div>
+      
+      {/* Notes Expandable Row */}
+      <AnimatePresence>
+        {openNotes === link.url && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="w-full border-b border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-slate-900/30 overflow-hidden"
+          >
+            <div className="px-14 py-4">
+              <textarea
+                value={currentNotes}
+                onChange={(e) => updateQuestionData(link.url, { notes: e.target.value })}
+                placeholder="Write your approach, edge cases, time & space complexity..."
+                rows={2}
+                className="w-full bg-white dark:bg-[#121826] border border-slate-200 dark:border-white/10 rounded-xl p-3 text-[13px] text-slate-700 dark:text-slate-300 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:ring-1 focus:ring-blue-500/50 focus:border-blue-500/50 outline-none transition-all resize-none shadow-sm"
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}, (prev, next) => {
+  return prev.isSolved === next.isSolved && 
+         prev.qData === next.qData && 
+         prev.openNotes === next.openNotes &&
+         prev.idx === next.idx &&
+         prev.link.url === next.link.url &&
+         prev.link.name === next.link.name;
+});
 
 const STATUS_OPTIONS = [
   { value: 'Revisit', icon: Clock, label: 'Need Revisit', colorClass: 'text-amber-500', bg: 'hover:bg-amber-500/10 border-amber-500/20' },
@@ -16,7 +142,7 @@ const DataTable = ({ topic, searchQuery, solved }) => {
   const [openNotes, setOpenNotes] = useState(null);
 
   // Derive Platform and Type from URL
-  const getBadges = (url) => {
+  const getBadges = useCallback((url) => {
     const u = url.toLowerCase();
     let platform = { text: 'SC', color: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400 border-indigo-200 dark:border-indigo-500/20' };
     let type = { text: 'Theory', color: 'bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400 border-blue-200 dark:border-blue-500/20' };
@@ -45,7 +171,7 @@ const DataTable = ({ topic, searchQuery, solved }) => {
     }
 
     return { platform, type };
-  };
+  }, []);
 
   // Extract all subtopics and flat links
   const { subTopics, allLinks } = useMemo(() => {
@@ -53,17 +179,6 @@ const DataTable = ({ topic, searchQuery, solved }) => {
 
     const subs = [];
     const links = [];
-
-    // Helper to extract links
-    const extract = (nodes, path) => {
-      nodes.forEach(n => {
-        if (n.type === 'link') links.push({ ...n, path });
-        else {
-          if (n.links) n.links.forEach(l => links.push({ ...l, path: `${path} / ${n.name}` }));
-          if (n.children) extract(n.children, `${path} / ${n.name}`);
-        }
-      });
-    };
 
     if (topic.children) {
       topic.children.forEach(c => {
@@ -123,12 +238,12 @@ const DataTable = ({ topic, searchQuery, solved }) => {
     }
 
     return result;
-  }, [allLinks, subTopics, activeSubTab, searchQuery, platformFilter, typeFilter]);
+  }, [allLinks, subTopics, activeSubTab, searchQuery, platformFilter, typeFilter, getBadges]);
 
   // Handle toggling solved state
-  const handleToggle = (url) => {
+  const handleToggle = useCallback((url) => {
     toggleSolved(url);
-  };
+  }, [toggleSolved]);
 
   if (!topic && !searchQuery) {
     return (
@@ -229,117 +344,20 @@ const DataTable = ({ topic, searchQuery, solved }) => {
         </div>
 
         <div className="flex flex-col">
-           {displayLinks.map((link, idx) => {
-              const { platform, type } = getBadges(link.url);
-              const isSolved = solved.includes(link.url);
-              const qData = userProgress[link.url] || {};
-              const currentStatus = isSolved ? 'Completed' : (qData.status || null);
-              const currentNotes = qData.notes || '';
-
-              return (
-                 <div key={`${link.url}-${idx}`} className="mb-2 w-full">
-                 <div className="grid grid-cols-12 gap-3 sm:gap-4 px-4 sm:px-6 py-3.5 sm:py-3 rounded-2xl bg-white/60 dark:bg-[#0E1525]/60 backdrop-blur-md border border-slate-200 dark:border-white/5 hover:border-blue-500/30 dark:hover:border-blue-500/30 hover:bg-white dark:hover:bg-[#131b2c]/80 transition-all duration-300 group items-center shadow-sm hover:shadow-lg dark:hover:shadow-blue-500/5 relative overflow-hidden">
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    {/* Index */}
-                    <div className="col-span-1 hidden sm:flex items-center">
-                        <span className="text-xs font-mono font-bold text-slate-300 dark:text-slate-600 group-hover:text-slate-400 dark:group-hover:text-slate-400 transition-colors">
-                           {String(idx + 1).padStart(2, '0')}
-                        </span>
-                    </div>
-
-                    {/* Problem Name & Path */}
-                    <div className="col-span-9 sm:col-span-6 flex flex-col justify-center">
-                        <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-[13px] sm:text-[14px] font-bold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-emerald-400 truncate tracking-tight transition-colors">
-                            {link.name}
-                        </a>
-                        {searchQuery && (
-                            <span className="text-[10px] text-slate-400 truncate font-semibold uppercase tracking-widest mt-0.5">
-                                 {link.path.replace(/\//g, '•')}
-                            </span>
-                        )}
-                    </div>
-
-                    {/* Platform/Type Badges */}
-                    <div className="col-span-3 hidden sm:flex items-center gap-2">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-widest border ${platform.color}`}>
-                            {platform.text}
-                        </span>
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-widest border hidden md:inline-block ${type.color}`}>
-                            {type.text}
-                        </span>
-                    </div>
-
-                    {/* Actions & Status Checkbox */}
-                    <div className="col-span-3 sm:col-span-2 flex items-center justify-end gap-2 pr-2 md:pr-0">
-                         {/* Status Buttons */}
-                         <div className="hidden lg:flex items-center gap-1 mr-2">
-                            {STATUS_OPTIONS.map(opt => {
-                                const Icon = opt.icon;
-                                const isOptActive = currentStatus === opt.value;
-                                return (
-                                    <button
-                                        key={opt.value}
-                                        title={opt.label}
-                                        onClick={() => updateQuestionData(link.url, { status: isOptActive ? null : opt.value })}
-                                        className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border
-                                            ${isOptActive 
-                                                ? `bg-slate-100 dark:bg-white/10 ${opt.colorClass} border-transparent` 
-                                                : `text-slate-300 dark:text-slate-600 border-transparent hover:text-slate-500 dark:hover:text-slate-400 ${opt.bg}`}`}
-                                    >
-                                        <Icon size={14} />
-                                    </button>
-                                )
-                            })}
-                            <button
-                                title="Notes"
-                                onClick={() => setOpenNotes(openNotes === link.url ? null : link.url)}
-                                className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border
-                                    ${openNotes === link.url || currentNotes
-                                        ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-500 border-transparent'
-                                        : 'text-slate-300 dark:text-slate-600 border-transparent hover:text-slate-500 dark:hover:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5'}`}
-                            >
-                                <PenSquare size={14} />
-                            </button>
-                         </div>
-
-                         <button
-                            onClick={() => handleToggle(link.url)}
-                            className={`w-6 h-6 rounded-md flex items-center justify-center transition-all duration-300 border shadow-sm flex-shrink-0
-                                ${isSolved 
-                                  ? 'bg-emerald-500 border-emerald-500 dark:bg-emerald-500/20 dark:border-emerald-500/50 text-white dark:text-emerald-400 shadow-emerald-500/20' 
-                                  : 'bg-white border-slate-300 dark:bg-transparent dark:border-slate-700 text-transparent hover:border-emerald-500/50 dark:hover:border-emerald-500/50'}`}
-                         >
-                            {isSolved && <Check size={14} strokeWidth={3} />}
-                         </button>
-                    </div>
-
-                 </div>
-                 
-                 {/* Notes Expandable Row */}
-                 <AnimatePresence>
-                     {openNotes === link.url && (
-                        <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="w-full border-b border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-slate-900/30 overflow-hidden"
-                        >
-                            <div className="px-14 py-4">
-                                <textarea
-                                    value={currentNotes}
-                                    onChange={(e) => updateQuestionData(link.url, { notes: e.target.value })}
-                                    placeholder="Write your approach, edge cases, time & space complexity..."
-                                    rows={2}
-                                    className="w-full bg-white dark:bg-[#121826] border border-slate-200 dark:border-white/10 rounded-xl p-3 text-[13px] text-slate-700 dark:text-slate-300 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:ring-1 focus:ring-blue-500/50 focus:border-blue-500/50 outline-none transition-all resize-none shadow-sm"
-                                />
-                            </div>
-                        </motion.div>
-                     )}
-                 </AnimatePresence>
-                 </div>
-              );
-           })}
+           {displayLinks.map((link, idx) => (
+             <QuestionRow
+               key={`${link.url}-${idx}`}
+               link={link}
+               idx={idx}
+               isSolved={solved.includes(link.url)}
+               qData={userProgress[link.url] || {}}
+               openNotes={openNotes}
+               setOpenNotes={setOpenNotes}
+               handleToggle={handleToggle}
+               updateQuestionData={updateQuestionData}
+               getBadges={getBadges}
+             />
+           ))}
         </div>
       </div>
     </div>

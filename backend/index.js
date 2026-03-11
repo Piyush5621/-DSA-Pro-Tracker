@@ -97,12 +97,16 @@ app.post('/api/progress', authenticate, async (req, res) => {
 // Optional: Expose global stats for the landing page
 app.get('/api/stats', async (req, res) => {
   try {
-    const snapshot = await db.collection('progress').get();
+    // Count from Firebase Auth to get actual registered accounts
+    const listUsersResult = await admin.auth().listUsers(1000);
+    const totalUsers = listUsersResult.users.length;
+    
     res.json({
         activeUsers: activeUsers,
-        totalRegistered: snapshot.size || 1 // Fallback so it doesn't look empty
+        totalRegistered: Math.max(totalUsers, 1)
     });
   } catch (error) {
+    console.error("Stats fetch error:", error.message);
     res.json({ activeUsers, totalRegistered: 1 });
   }
 });

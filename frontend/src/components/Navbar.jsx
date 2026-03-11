@@ -7,7 +7,11 @@ import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
 
-const socket = io(process.env.REACT_APP_API_URL || 'http://localhost:5000', {
+const apiUrl = process.env.NODE_ENV === 'production' 
+    ? window.location.origin 
+    : (process.env.REACT_APP_API_URL || 'http://localhost:5000');
+
+const socket = io(apiUrl, {
     withCredentials: true,
 });
 

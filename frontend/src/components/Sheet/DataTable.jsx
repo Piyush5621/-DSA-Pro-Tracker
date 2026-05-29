@@ -1,7 +1,7 @@
 import { useState, useMemo, memo, useCallback } from 'react';
 import { useProgress } from '../../context/ProgressContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ListFilter, Clock, AlertTriangle, PenSquare } from 'lucide-react';
+import { Check, ListFilter, Clock, AlertTriangle, PenSquare, Code, Copy, Trash2 } from 'lucide-react';
 
 const QuestionRow = memo(({ 
   link, 
@@ -17,6 +17,10 @@ const QuestionRow = memo(({
   const { platform, type } = getBadges(link.url);
   const currentStatus = isSolved ? 'Completed' : (qData.status || null);
   const currentNotes = qData.notes || '';
+  const currentCode = qData.code || '';
+  const currentLanguage = qData.language || 'cpp';
+  const [activeTab, setActiveTab] = useState('notes');
+  const [copySuccess, setCopySuccess] = useState(false);
 
   return (
     <div className="mb-2 w-full">
@@ -106,14 +110,144 @@ const QuestionRow = memo(({
             transition={{ duration: 0.2 }}
             className="w-full border-b border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-slate-900/30 overflow-hidden"
           >
-            <div className="px-14 py-4">
-              <textarea
-                value={currentNotes}
-                onChange={(e) => updateQuestionData(link.url, { notes: e.target.value })}
-                placeholder="Write your approach, edge cases, time & space complexity..."
-                rows={2}
-                className="w-full bg-white dark:bg-[#121826] border border-slate-200 dark:border-white/10 rounded-xl p-3 text-[13px] text-slate-700 dark:text-slate-300 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:ring-1 focus:ring-blue-500/50 focus:border-blue-500/50 outline-none transition-all resize-none shadow-sm"
-              />
+            <div className="px-6 sm:px-14 py-4 flex flex-col gap-4">
+              {/* Tab headers */}
+              <div className="flex items-center justify-between border-b border-slate-200/50 dark:border-white/5 pb-2">
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setActiveTab('notes')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 ${
+                      activeTab === 'notes'
+                        ? 'bg-blue-500/10 text-blue-500 border border-blue-500/20'
+                        : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 border border-transparent'
+                    }`}
+                  >
+                    <PenSquare size={12} />
+                    Approach Notes
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('code')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 ${
+                      activeTab === 'code'
+                        ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
+                        : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 border border-transparent'
+                    }`}
+                  >
+                    <Code size={12} />
+                    Code Solution
+                  </button>
+                </div>
+
+                {activeTab === 'code' && (
+                  <div className="flex items-center gap-3">
+                    {/* Language Dropdown */}
+                    <select
+                      value={currentLanguage}
+                      onChange={(e) => updateQuestionData(link.url, { language: e.target.value })}
+                      className="bg-slate-100 border border-slate-200 dark:bg-[#121826] dark:border-white/10 px-2 py-1 rounded-md text-slate-600 dark:text-slate-300 transition-colors text-[11px] font-bold outline-none cursor-pointer"
+                    >
+                      <option value="cpp">C++</option>
+                      <option value="java">Java</option>
+                      <option value="python">Python</option>
+                      <option value="javascript">JavaScript</option>
+                    </select>
+
+                    <div className="h-4 w-px bg-slate-200 dark:bg-white/10"></div>
+
+                    {/* Copy Button */}
+                    <button
+                      onClick={() => {
+                        if (currentCode) {
+                          navigator.clipboard.writeText(currentCode);
+                          setCopySuccess(true);
+                          setTimeout(() => setCopySuccess(false), 2000);
+                        }
+                      }}
+                      disabled={!currentCode}
+                      className={`flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider px-2 py-1 rounded-md border transition-all ${
+                        currentCode
+                          ? 'text-slate-600 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/5 cursor-pointer'
+                          : 'text-slate-300 dark:text-slate-700 border-transparent cursor-not-allowed'
+                      }`}
+                      title="Copy code to clipboard"
+                    >
+                      <Copy size={11} />
+                      {copySuccess ? 'Copied!' : 'Copy'}
+                    </button>
+
+                    {/* Clear Button */}
+                    <button
+                      onClick={() => {
+                        if (window.confirm('Are you sure you want to clear your code solution?')) {
+                          updateQuestionData(link.url, { code: '' });
+                        }
+                      }}
+                      disabled={!currentCode}
+                      className={`flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider px-2 py-1 rounded-md border transition-all ${
+                        currentCode
+                          ? 'text-rose-500 border-rose-500/20 hover:bg-rose-500/10 cursor-pointer'
+                          : 'text-slate-300 dark:text-slate-700 border-transparent cursor-not-allowed'
+                      }`}
+                      title="Clear code solution"
+                    >
+                      <Trash2 size={11} />
+                      Clear
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Tab contents */}
+              <div className="w-full">
+                {activeTab === 'notes' ? (
+                  <textarea
+                    value={currentNotes}
+                    onChange={(e) => updateQuestionData(link.url, { notes: e.target.value })}
+                    placeholder="Write your approach, edge cases, time & space complexity..."
+                    rows={4}
+                    className="w-full bg-white dark:bg-[#121826] border border-slate-200 dark:border-white/10 rounded-xl p-3 text-[13px] text-slate-700 dark:text-slate-300 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:ring-1 focus:ring-blue-500/50 focus:border-blue-500/50 outline-none transition-all resize-none shadow-sm"
+                  />
+                ) : (
+                  <div className="relative w-full rounded-2xl overflow-hidden border border-slate-200 dark:border-white/5 bg-slate-900/90 dark:bg-[#070b16]">
+                    {/* Editor Header Bar */}
+                    <div className="flex items-center justify-between px-4 py-2 bg-slate-950/60 dark:bg-[#04060c] border-b border-slate-200/5 dark:border-white/5 font-mono text-[10px] text-slate-500">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-2.5 h-2.5 rounded-full bg-rose-500/60"></span>
+                        <span className="w-2.5 h-2.5 rounded-full bg-amber-500/60"></span>
+                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/60"></span>
+                        <span className="ml-2 text-slate-400">solution.{currentLanguage === 'cpp' ? 'cpp' : currentLanguage === 'java' ? 'java' : currentLanguage === 'python' ? 'py' : 'js'}</span>
+                      </div>
+                      <span>{currentCode ? `${currentCode.split('\n').length} lines` : '0 lines'}</span>
+                    </div>
+                    <textarea
+                      value={currentCode}
+                      onChange={(e) => updateQuestionData(link.url, { code: e.target.value })}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Tab') {
+                          e.preventDefault();
+                          const { selectionStart, selectionEnd, value } = e.target;
+                          const newCodeValue = value.substring(0, selectionStart) + '  ' + value.substring(selectionEnd);
+                          updateQuestionData(link.url, { code: newCodeValue });
+                          setTimeout(() => {
+                            e.target.selectionStart = e.target.selectionEnd = selectionStart + 2;
+                          }, 0);
+                        }
+                      }}
+                      placeholder={`// Write your ${
+                        currentLanguage === 'cpp'
+                          ? 'C++'
+                          : currentLanguage === 'java'
+                          ? 'Java'
+                          : currentLanguage === 'python'
+                          ? 'Python'
+                          : 'JavaScript'
+                      } solution here...`}
+                      rows={12}
+                      className="w-full bg-transparent p-4 text-[13px] font-mono text-emerald-400/90 dark:text-emerald-400/80 placeholder:text-slate-600 focus:outline-none transition-all resize-none shadow-sm leading-6 whitespace-pre overflow-auto"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </motion.div>
         )}
